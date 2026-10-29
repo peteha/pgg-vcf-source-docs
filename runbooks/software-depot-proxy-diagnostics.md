@@ -4,7 +4,7 @@
 
 This read-only investigation helps identify a failed Software Depot request and correlate it with a customer proxy's access logs. It covers a **connected Software Depot** on VCF 9.1.x. A bastion or VCF Download Tool has its own proxy configuration and requires separate logs.
 
-A failed download alone does not prove an allowlist problem. A matching denial in the proxy log is the evidence needed to identify the rule and destination.
+A failed download alone does not prove an allowlist problem. A matching denial in the proxy log is the evidence needed to identify the rule and destination. **Open a Broadcom Support request and use this procedure alongside it.** Follow Support’s release-specific guidance for runtime access and diagnostics.
 
 ## Before you begin
 
@@ -13,7 +13,13 @@ A failed download alone does not prove an allowlist problem. A matching denial i
 - Logs can contain credentials, tokens, signed URLs and customer information. Inspect them locally under the customer's controls and sanitize before sharing. Do not print environment variables, proxy credentials, configuration secrets or raw API responses.
 - If SSH is disabled, enabling it is a separate configuration change. Do not trigger a download solely to capture logs unless the customer authorizes a bounded test.
 
-## 1. Establish the failure
+## 1. Open a support request
+
+Open a Broadcom Support request for the affected VCF environment and describe the Software Depot operation and proxy symptoms. Include the deployed VCF version and build, affected runtime and depot, approximate failure time and time zone, and the customer-approved business impact. Ask Support to confirm the supported runtime access and logging procedure for the deployed build.
+
+As the investigation proceeds, attach only customer-approved, sanitized evidence: the relevant timestamps, destination host and port, proxy decision, and request ID where available. Follow Support's instructions for securely providing any requested log bundle. Do not paste credentials, tokens, signed URLs or raw logs into the request.
+
+## 2. Establish the failure
 
 In VCF Operations, identify the affected Software Depot and its connection mode. Record the VCF version, affected runtime instance, failing action, approximate time and time zone. Start with **Operate → Logs** if log management is available.
 
@@ -21,7 +27,7 @@ For direct runtime access, identify the affected services runtime control-plane 
 
 Ask the proxy team for the proxy endpoint and the runtime's actual egress source IP or addresses as observed by the proxy. A runtime can have multiple source IPs.
 
-## 2. Identify the depot workload
+## 3. Identify the depot workload
 
 In the approved runtime context, run:
 
@@ -40,7 +46,7 @@ kubectl -n vcf-fleet-depot get pod <depot-pod> \
 
 [Broadcom KB 453506](https://knowledge.broadcom.com/external/article/453506/validation-of-offline-software-depot-fai.html) identifies the pod as `depot-service-<suffix>` and the application container as `download-service` for VCF 9.1. Confirm both appear in the deployment; do not substitute the file-server, gateway or registry container.
 
-## 3. Inspect the failure window
+## 4. Inspect the failure window
 
 Replace `<depot-pod>` with the verified pod name. Choose a short window around the failure; 30 minutes is an example:
 
@@ -55,7 +61,7 @@ Record only the timestamp, destination hostname and port, sanitized error class,
 
 For support bundles, [KB 453215](https://knowledge.broadcom.com/external/article/453215/proxy-configuration-for-vcf-management-s.html) identifies `vcf-fleet-depot/<node_name>/depot-service-<identifier>/download-service/console-log`. This is a **bundle location**, not a verified path on the live filesystem.
 
-## 4. Correlate with the proxy
+## 5. Correlate with the proxy
 
 Give the proxy team the failure window and time zone, observed runtime source IP, destination host and port, and request ID if available. Ask for the proxy's policy decision, authentication outcome and any redirect or additional destination. Match the timestamp and source IP with the depot event.
 
@@ -68,7 +74,7 @@ Give the proxy team the failure window and time zone, observed runtime source IP
 | Timeout or no matching proxy record | Check the source IP, time window, DNS, routing, firewall and whether the runtime uses the proxy. Absence from a log is not proof of direct egress. |
 | Upstream `401` or `404` | Investigate upstream entitlement, credentials or artifact availability; do not assume the proxy is responsible. |
 
-## 5. Compare with the vendor destination list
+## 6. Compare with the vendor destination list
 
 The VCF 9.1.x guide lists the following for binary downloads:
 
@@ -82,9 +88,9 @@ Supervisor and VCF service downloads also list `projects.packages.broadcom.com`.
 
 Use the current vendor list for the exact release and enabled features. This is not a complete firewall allowlist; CDN redirects and the proxy's policy model may require further investigation. PAIS mirroring and bastion tools have separate source and proxy paths.
 
-## 6. Confirm the fix
+## 7. Confirm the fix
 
-Once the customer approves any proxy change, repeat one agreed, bounded operation and correlate the depot result with an allow decision in the proxy logs. Record the destination, source, timestamp, rule and outcome. Do not disable TLS validation or bypass the proxy to make the test pass.
+Coordinate the next steps with Broadcom Support and the proxy owner. Once the customer approves any proxy change, repeat one agreed, bounded operation and correlate the depot result with an allow decision in the proxy logs. Record the destination, source, timestamp, rule and outcome. Do not disable TLS validation or bypass the proxy to make the test pass.
 
 ## Sources and limits
 
