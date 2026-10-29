@@ -1,8 +1,8 @@
-# VCF Source customer documents
+# VCF Source: software paths and troubleshooting
 
-Private working drafts for VCF software and artifact distribution and troubleshooting. These materials are not approved for external publication.
+> **Actively being updated.** These documents are a limited early release. Their diagrams, commands and version-specific guidance are drafts and may change as validation continues.
 
-- [Software Depot proxy diagnostics](runbooks/software-depot-proxy-diagnostics.md) — draft; runtime access, namespace and container names require release-specific lab validation.
-- [VCF software paths diagram](diagrams/supervisor-customer/supervisor-content-paths.svg) ([PNG](diagrams/supervisor-customer/supervisor-content-paths.png)) — editable source and notes in the same directory.
+- [Software Depot proxy diagnostics](runbooks/software-depot-proxy-diagnostics.md) — the VCF 9.1 log route is documented; the commands have not yet been validated against a 9.1.1 runtime.
+- [VCF software paths diagram](diagrams/supervisor-customer/supervisor-content-paths.svg) ([PNG](diagrams/supervisor-customer/supervisor-content-paths.png)) — connected depot and separate PAIS acquisition paths; editable source and notes are included.
 
-Review version assumptions, customer-specific access, source citations, and applicable publication controls before sharing outside the lab.
+Check the cited vendor documentation and your deployment's version, configuration and access procedures before applying the guidance.

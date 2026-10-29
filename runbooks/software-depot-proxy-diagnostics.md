@@ -1,6 +1,6 @@
 # Troubleshoot VCF Software Depot proxy connections
 
-**Status:** Draft. Broadcom documents the depot pod and `download-service` logs for VCF 9.1. The commands below have not yet been validated against a 9.1.1 runtime.
+**Status: Actively being updated — limited early release.** Draft. Broadcom documents the depot pod and `download-service` logs for VCF 9.1. The commands below have not yet been validated against a 9.1.1 runtime.
 
 This read-only investigation helps identify a failed Software Depot request and correlate it with a customer proxy's access logs. It covers a **connected Software Depot** on VCF 9.1.x. A bastion or VCF Download Tool has its own proxy configuration and requires separate logs.
 
